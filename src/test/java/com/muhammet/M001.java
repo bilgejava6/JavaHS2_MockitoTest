@@ -1,6 +1,8 @@
 package com.muhammet;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -75,7 +77,6 @@ public class M001 {
         verify(list).add("Deniz");
         verify(list).add(anyString());
     }
-
     @Test
     void methodCagrimSayilari(){
         List<String> list = mock(ArrayList.class);
@@ -104,6 +105,29 @@ public class M001 {
         verify(list,atLeast(2)).add("Bahar");
         // en fazla 3 defa yada n defa v.s.
         verify(list,atMost(3)).add("TekinTAŞ");
+
+    }
+    @Test
+    void cagirimSirasi(){
+        List<String> list = mock(ArrayList.class);
+        list.add("Muhammet");
+        list.add("Deniz");
+
+        InOrder inOrder = inOrder(list);
+
+        inOrder.verify(list).add("Muhammet");
+        inOrder.verify(list).add("Deniz");
+
+        // birden fazla mock nesnesinin çağırım sırası
+        List<String> userService = mock(ArrayList.class);
+        List<String> stokService =  mock(ArrayList.class);
+
+        userService.add("Muhammet");
+        stokService.add("Deniz");
+        InOrder mutliOrder = inOrder(userService,stokService);
+
+        mutliOrder.verify(userService).add("Muhammet");
+        mutliOrder.verify(stokService).add("Deniz");
 
     }
 
